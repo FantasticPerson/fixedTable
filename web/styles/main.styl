@@ -1,0 +1,58 @@
+@import "./common.styl"
+@import "./icon.styl"
+
+@import "./components/BaseModal.styl"
+@import "./components/LoadingModal.styl"
+
+@import "containers/demoPage.styl"
+
+body
+  background-color #ffffff
+  margin 0
+
+div
+  font-size 12px
+
+table
+  border: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+*{
+  padding 0
+  margin 0
+}
+
+th
+  white-space: nowrap;
+  background-color: #f2f7fb;
+  color: #36a6de;
+  border: 0;
+  border-top: 1px solid #e7f0f8;
+  border-left: 1px solid #e7f0f8;
+
+td
+  line-height: 21px;
+  height: 35px;
+  border: none;
+  vertical-align: middle;
+  color: #000;
+  border-left: 1px solid rgb(231, 240, 248);
+  border-top: 1px solid rgb(231, 240, 248);
+  border-bottom: 1px solid rgb(231, 240, 248);
+  width: 100px;
+  overflow hidden
+  text-align: center !important;
+
+.ft-td
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  height: 30px;
+  white-space: nowrap;
+  line-height: 30px;
+  text-overflow: ellipsis;
+
+th,
+td{
+  box-sizing border-box
+}
