@@ -12,10 +12,11 @@ export default class FixedTable extends Component{
     render(){
         let thPosInfo = this.getPosInfo();
         let tdWidthPosInfo = this.getPosInfo2(thPosInfo);
-
-        // console.log(thPosInfo,tdWidthPosInfo);
-        var seperateNum = 3;
         const {left,top} = this.state;
+        const {width,height} = this.props;
+        let {data} = this.props.data;
+        let tempHeight = 33*data.length+20;
+
         this.getPosInfo();
         return (
             <div>
@@ -25,7 +26,7 @@ export default class FixedTable extends Component{
                             {this.renderThead1(thPosInfo)}
                         </thead>
                     </table>
-                    <div style={{height:'300px',overflow:'hidden'}}>
+                    <div style={{height:tempHeight > height-120 ? height -120 : tempHeight,overflow:'hidden'}}>
                         <table width={'400px'} style={{marginTop:top}}>
                             <tbody>
                                 {this.renderTbody1(tdWidthPosInfo)}
@@ -39,14 +40,14 @@ export default class FixedTable extends Component{
                     top: '0',
                     marginLeft:'400px'
                 }}>
-                    <div style={{width:'400px',overflow:'hidden'}}>
+                    <div style={{width:width-420,overflow:'hidden'}}>
                     <table style={{width:'1450px',marginLeft:left}}>
                         <thead>
                         {this.renderThead2(thPosInfo)}
                         </thead>
                     </table>
                     </div>
-                    <div  style={{width:'400px',height:'300px',overflow:'auto'}} onScroll={(e)=>{
+                    <div  style={{width:width-420,height:tempHeight > height-120 ? height -120 : tempHeight,overflow:'auto'}} onScroll={(e)=>{
                         this.setState({left:-e.target.scrollLeft,top:-e.target.scrollTop})
                         // console.log(e)
                     }}>

@@ -5,6 +5,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import * as overLayNames from '../constants/OverLayNames';
 import FixedTable from '../components/fixedTable'
+import MultiList from '../components/MultiList'
 
 class App extends Component {
     renderOverLay(){
@@ -22,7 +23,8 @@ class App extends Component {
         return (
             <div id="react-app">
                 {this.renderOverLay()}
-                <FixedTable data={this.props.tableData}/>
+                {<MultiList data={this.props.tableData}/>}
+                {/*<FixedTable data={this.props.tableData}/>*/}
             </div>
         )
     }
