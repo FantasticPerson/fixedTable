@@ -2,18 +2,20 @@
  * Created by wdd on 2017/5/18.
  */
 import React,{Component} from 'react'
+import {titles} from '../constants/mockData2'
 
 export default class FixedTable extends Component{
     constructor(){
         super();
-        this.state={left:0,top:0};
+        this.state={left:0,top:0,upArrowBtn1:'tj-up-arrow',upArrowBtn2:'tj-up-arrow'};
+        this.itemPropNames=['JYZKH','JYZH','JYRQ','JYJE','JYYE','SFBZ','DSZH','DSHM','ZYSM','JYWDMC']
     }
 
     render(){
         let thPosInfo = this.getPosInfo();
         let tdWidthPosInfo = this.getPosInfo2(thPosInfo);
         const {left,top} = this.state;
-        const {width,height} = this.props;
+        const {width,height,onPaixu1,onPaixu2,paixu1,paixu2} = this.props;
         let {data} = this.props.data;
         let tempHeight = 33*data.length+20;
 
@@ -95,13 +97,19 @@ export default class FixedTable extends Component{
     }
 
     renderThead2(posInfo){
+        const {onPaixu1,onPaixu2,paixu1,paixu2} = this.props;
         return posInfo.map((item1,index)=>{
             let ths = [];
             for(let i = 3;i<item1.length;i++){
                 let item = item1[i];
                 if(item) {
-                    // console.log(item.name);
-                    ths.push(<th colSpan={item.item.cols} rowSpan={item.item.rows} style={{height:33 * item.item.rows + 'px', width:Number(item.item.width.slice(0,-2))-1+'px'}} key={i}>{item.item.name}</th>)
+                    let btn;
+                    if(item.item.name ===  '交易金额'){
+                        btn=<div className={paixu1 === 'up' ? "tj-up-arrow" : 'tj-down-arrow'} onClick={(e)=>{onPaixu1()}}/>
+                    } else if(item.item.name === '收付标识'){
+                        btn=<div className={paixu2 === 'up' ? "tj-up-arrow" : 'tj-down-arrow'} onClick={(e)=>{onPaixu2()}}/>
+                    }
+                    ths.push(<th colSpan={item.item.cols} rowSpan={item.item.rows} style={{height:33 * item.item.rows + 'px', width:Number(item.item.width.slice(0,-2))-1+'px'}} key={i}>{item.item.name}{btn}</th>)
                 }
             }
             return <tr key={index}>{ths}</tr>
@@ -128,9 +136,9 @@ export default class FixedTable extends Component{
         return data.map((item,index)=>{
             let tds = [];
             for(let i=0;i<3;i++){
-                tds.push(<td key={i} style={{height:'33px',width:Number(posInfo[i].slice(0,-2))-1+'px'}}  rowSpan={item.rows} colSpan={item.cols}>
+                tds.push(<td key={i} style={{height:'33px',width:Number(posInfo[i].slice(0,-2))-1+'px'}}  rowSpan={1} colSpan={1}>
                     <div className="ft-td">
-                        {item.data[i+1]}
+                        {item[this.itemPropNames[i]]}
                     </div>
                 </td>)
             }
@@ -142,10 +150,10 @@ export default class FixedTable extends Component{
         const {data} = this.props.data;
         return data.map((item,index)=>{
             let tds = [];
-            for(let i=3;i<17;i++){
-                tds.push(<td key={i} style={{height:'33px',width:Number(posInfo[i].slice(0,-2))-1+'px'}} rowSpan={item.rows} colSpan={item.cols}>
+            for(let i=3;i<10;i++){
+                tds.push(<td key={i} style={{height:'33px',width:Number(posInfo[i].slice(0,-2))-1+'px'}} rowSpan={1} colSpan={1}>
                     <div className="ft-td">
-                        {item.data[i+1]}
+                        {item[this.itemPropNames[i]]}
                     </div>
                 </td>)
             }
@@ -154,15 +162,15 @@ export default class FixedTable extends Component{
     }
 
     getPosInfo(){
-        const {title,data} = this.props.data;
+        // const {title,data} = this.props.data;
         let posInfoArr = [];
-        for(let i=0;i<title.length;i++){
+        for(let i=0;i<titles.length;i++){
             posInfoArr.push([]);
         }
-        for(let i=0;i<title.length;i++){
-            for(let j=0;j<title[i].length;j++) {
+        for(let i=0;i<titles.length;i++){
+            for(let j=0;j<titles[i].length;j++) {
                 let index = getUndefinedIndex(posInfoArr[i]);
-                let item = title[i][j];
+                let item = titles[i][j];
                 posInfoArr[i][index] = {rows:item.rows,cols:item.cols,width:item.width,item:item};
                 if(item.rows > 1){
                     for(let k=1;k<item.rows;k++){

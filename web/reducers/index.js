@@ -6,7 +6,8 @@ import {nestCombineReducers, handleActionsReducor} from '../utils/reducer-helper
 import * as demoPage from './demoPage'
 import * as view from './view'
 import * as fixedTable from './fixedTable'
-import {tableData} from '../constants/mockData'
+// import {tableData} from '../constants/mockData'
+import {data} from '../constants/mockData2'
 
 export const rootReducer = nestCombineReducers({
     routing:routerReducer,
@@ -17,7 +18,7 @@ export const rootReducer = nestCombineReducers({
         overLayList:handleActionsReducor([],view.overLayList)
     },
     fixedTable:{
-        data:handleActionsReducor(tableData,fixedTable.title)
+        data:handleActionsReducor({data:data.result},[])
     }
 });
 
