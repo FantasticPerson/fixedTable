@@ -8,7 +8,7 @@ export default class MultiList extends Component {
     constructor(){
         super();
         const {innerWidth,innerHeight} = window;
-        this.state={pageIndex:0,innerWidth,innerHeight,paixu1:'up',paixu2:'up',currentPaixu:0};
+        this.state={pageIndex:0,innerWidth,innerHeight,paixu1:'up',paixu2:'up',currentPaixu:0,searchCol:'',searchValue:''};
     }
 
     handleResize(){
@@ -29,6 +29,28 @@ export default class MultiList extends Component {
         const {innerWidth,innerHeight} = this.state;
         return(
             <div style={{width:innerWidth,height:innerHeight}}>
+                <input ref="input" style={{
+                    display: 'inline-block',
+                    width: '1200px',
+                    marginLeft: '10px',
+                    height: '30px',
+                    marginBottom: '5px',
+                    marginTop: '5px'
+                }}/>
+                <select ref="select">
+                    <option>{'--请选择筛选字段--'}</option>
+                    <option value="JYZKH">{'交易帐卡号'}</option>
+                    <option value="JYZH">{'交易账号'}</option>
+                    <option value="JYRQ">{'交易日期'}</option>
+                    <option value="JYJE">{'交易金额'}</option>
+                    <option value="JYYE">{'交易余额'}</option>
+                    <option value="SFBZ">{'收付标识'}</option>
+                    <option value="DSZH">{'对手账号'}</option>
+                    <option value="DSHM">{'对手户名'}</option>
+                    <option value="ZYSM">{'摘要说明'}</option>
+                    <option value="JYWDMC">{'交易网点名称'}</option>
+                </select>
+                <button onClick={()=>{this.onSearchClick()}}>搜索</button>
                 <div className="tr-multi-list-scroll-container" style={{}}>
                     {this.renderContent()}
                 </div>
@@ -38,11 +60,13 @@ export default class MultiList extends Component {
     }
 
     renderContent(){
-        const {innerWidth,innerHeight,paixu1,paixu2,currentPaixu} = this.state;
+        const {innerWidth,innerHeight,paixu1,paixu2,currentPaixu,searchCol,searchValue} = this.state;
         const {data} = this.props.data;
         const {pageIndex} = this.state;
         let cData = data.slice(pageIndex*20,(pageIndex+1)*20);
-        let resultData;
+        if(searchCol !== '' && searchValue !== ''){
+            cData = this.search(cData,searchCol,searchValue);
+        }
         if(currentPaixu === 1){
             cData.sort(function(item1,item2){
                 if(paixu1 === 'up') {
@@ -70,6 +94,16 @@ export default class MultiList extends Component {
             height={innerHeight-26}
             onPaixu1={this.onPaixu1.bind(this)}
             onPaixu2={this.onPaixu2.bind(this)}/>
+    }
+
+    search(arr,col,value){
+        let results = [];
+        arr.map((item)=>{
+            if(item[col] && item[col].toString().indexOf(value) >= 0){
+                results.push(item);
+            }
+        });
+        return results;
     }
 
     renderFooter(){
@@ -182,5 +216,16 @@ export default class MultiList extends Component {
     onPaixu2(){
         const {paixu2} = this.state;
         this.setState({currentPaixu:2,paixu2:(paixu2 === 'up'?'down':'up')})
+    }
+    onSearchClick(){
+        const {input,select} = this.refs;
+        if(input.value && input.value.length > 0){
+            let option = select.options[select.selectedIndex];
+            if(option.value && option.value.length > 0){
+                this.setState({searchCol:option.value,searchValue:input.value});
+                return;
+            }
+        }
+        this.setState({searchCol:'',searchValue:''})
     }
 }
